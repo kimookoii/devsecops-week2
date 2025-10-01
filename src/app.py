@@ -10,9 +10,12 @@ def divide(a, b):
 
 # contoh fungsi berbahaya yang sempat kita tambahkan untuk uji Bandit
 import subprocess
-import shlex
 
-def run_command(cmd):
-    args = shlex.split(cmd)
-    result = subprocess.run(args, capture_output=True, text=True)
+def run_command_safe(cmd: str):
+    # hanya izinkan command tertentu (whitelist)
+    allowed_cmds = ["ls", "pwd", "whoami"]
+    if cmd not in allowed_cmds:
+        raise ValueError("Perintah tidak diizinkan")
+
+    result = subprocess.run([cmd], capture_output=True, text=True, check=True)
     return result.stdout
