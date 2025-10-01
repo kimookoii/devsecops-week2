@@ -1,4 +1,5 @@
 import subprocess
+import shlex
 
 def add(a, b):
     return a + b
@@ -9,6 +10,7 @@ def divide(a, b):
     return a / b
 
 def run_command(cmd):
-    # BUG: penggunaan shell=True berbahaya (Command Injection)
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    # FIX: hindari shell=True, gunakan shlex.split untuk parsing
+    args = shlex.split(cmd)
+    result = subprocess.run(args, capture_output=True, text=True)
     return result.stdout
